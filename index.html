@@ -1,1 +1,506 @@
 
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio | Faiz Elahi</title>
+  <meta name="description" content="Red Team / Ethical Hacking portfolio — authorized adversary emulation, purple-team, and offensive security research." />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg1:#060406; /* near black */
+      --accent:#ff2d55; /* hot red */
+      --accent-2:#ff7b9c; /* lighter red */
+      --muted:#9aa0a6;
+      --panel:#0b0b0d;
+      --glass:rgba(255,255,255,0.02);
+      --warn:#ffcccb;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,system-ui,Arial;background:radial-gradient(circle at 10% 10%, rgba(255,45,85,0.03), transparent 10%), linear-gradient(180deg,var(--bg1),#020203);color:#fff;min-height:100vh}
+    a{color:var(--accent);text-decoration:none}
+    .wrap{max-width:1160px;margin:28px auto;padding:24px}
+
+    header{display:flex;justify-content:space-between;align-items:center;gap:12px}
+    .brand{display:flex;align-items:center;gap:12px}
+    .logo{width:64px;height:64px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#90001f);display:flex;align-items:center;justify-content:center;font-weight:900;box-shadow:0 8px 30px rgba(255,45,85,0.08)}
+    .brand h1{margin:0;font-size:20px}
+    nav{display:flex;gap:10px}
+    nav a{padding:8px 12px;border-radius:8px;background:transparent}
+
+    /* hero split */
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:22px;margin-top:18px}
+    .panel{background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.02));border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.03)}
+
+    .intro h2{font-size:28px;margin:0 0 8px}
+    .intro p{color:var(--muted);margin:0 0 12px}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.02);font-size:13px}
+
+    /* visual pane */
+    .visual{height:320px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;border-radius:10px}
+    .visual svg{width:100%;height:100%;display:block}
+    .glow{position:absolute;inset:0;mix-blend-mode:screen;opacity:0.12;pointer-events:none}
+
+    /* cards grid */
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+    .stat{padding:14px;border-radius:10px;background:linear-gradient(90deg, rgba(255,45,85,0.03), transparent);text-align:center}
+    .stat .num{font-size:20px;font-weight:800;color:var(--accent)}
+    .list{margin-top:8px}
+
+    /* terminal feed */
+    .terminal{background:#020203;border-radius:10px;padding:12px;font-family:monospace;color:#ff9fb3;min-height:120px}
+    .terminal .line{margin:6px 0}
+
+    /* tools and playbooks */
+    .tools{display:flex;flex-direction:column;gap:10px}
+    .tool{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.01)}
+    .tool .dot{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+
+    /* killchain flow */
+    .killchain{display:flex;gap:8px;align-items:center;overflow:auto;padding:8px;margin-top:12px}
+    .kc{min-width:140px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.01);text-align:center}
+
+    /* posts */
+    .posts-list{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+    .post{padding:12px;border-radius:8px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.02);cursor:pointer}
+
+    /* forms */
+    form input, form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;margin-top:8px}
+    form button{margin-top:8px;padding:10px 12px;border-radius:8px;border:none;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#160006;font-weight:700;cursor:pointer}
+
+    .notice{background:rgba(255,204,203,0.06);border:1px solid rgba(255,204,203,0.12);color:var(--warn);padding:10px;border-radius:8px;margin-bottom:12px}
+
+    footer{margin:28px 0;color:var(--muted);text-align:center}
+
+    @media (max-width:980px){.hero{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr}}
+
+    /* animated pulse for emphasis */
+    .pulse{position:relative}
+    .pulse:after{content:'';position:absolute;inset:-12px;border-radius:14px;box-shadow:0 0 40px rgba(255,45,85,0.08);opacity:0;animation:pulse 2.6s infinite}
+    @keyframes pulse{0%{opacity:0}40%{opacity:1}100%{opacity:0}}
+
+    /* subtle floating action */
+    .fab{position:fixed;right:20px;bottom:20px;background:linear-gradient(135deg,var(--accent),#a00028);padding:12px;border-radius:12px;box-shadow:0 18px 40px rgba(160,0,40,0.18);cursor:pointer}
+
+    /* modal backdrop + box */
+    #postModalBackdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;z-index:60}
+    #postModal{width:min(900px,94%);max-height:86vh;overflow:auto;border-radius:12px;background:#060406;padding:18px;border:1px solid rgba(255,255,255,0.04);transform:translateY(20px) scale(.98);opacity:0;transition:all .28s cubic-bezier(.2,.9,.2,1)}
+    #postModal.show{transform:translateY(0) scale(1);opacity:1}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo">RT</div>
+        <div>
+          <h1>FAIZAN AHMAD</h1>
+          <div style="font-size:13px;color:var(--muted)">Authorized emulations • Payload lab (safe) • Purple-team writeups</div>
+        </div>
+      </div>
+      <nav>
+        <a href="#labs">Labs</a>
+        <a href="#tools">Tools</a>
+        <a href="#killchain">Kill Chain</a>
+        <a href="#contact">Contact</a>
+        <a href="writeups.html">Writeups</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="panel intro">
+        <h2>Red Team — Ethical Hacking</h2>
+        <p>Focused on adversary emulation, red team operations, opsec-aware payload testing, and purple-team collaboration. Everything here is meant for safe lab use and to improve defensive detection coverage.</p>
+
+        <div class="chips">
+          <div class="chip">Adversary Emulation</div>
+          <div class="chip">C2 Testing (lab)</div>
+          <div class="chip">Payload Dev (safe)</div>
+          <div class="chip">Phishing Simulations</div>
+          <div class="chip">Purple-team</div>
+        </div>
+
+        <div style="margin-top:12px;display:flex;gap:10px;align-items:center;justify-content:space-between">
+          <div style="display:flex;gap:12px;align-items:center">
+            <div class="stat pulse" style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.01)"><div style="font-size:18px;font-weight:800;color:var(--accent)">120+</div><div style="font-size:12px;color:var(--muted)">Safe Tests</div></div>
+            <div class="stat" style="padding:8px;border-radius:8px;background:rgba(255,255,255,0.01)"><div class="num">35</div><div style="font-size:12px;color:var(--muted)">Playbooks</div></div>
+          </div>
+
+          <div style="text-align:right">
+            <button onclick="downloadPdf()" style="background:linear-gradient(135deg,var(--accent),var(--accent-2));border:none;padding:10px 14px;border-radius:10px;font-weight:700;color:#160006;cursor:pointer">Download Red CV</button>
+            <div style="font-size:12px;color:var(--muted);margin-top:6px">Available for authorized engagements</div>
+          </div>
+        </div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.03)">
+
+        <div class="terminal" id="rt-terminal">
+          <div class="line"><span style="color:#ffb1c4">$</span> <span id="rtline">Preparing emulation environment...</span></div>
+        </div>
+      </div>
+
+      <aside class="panel visual">
+        <!-- SVG cyber-graphic: safe C2 mockup -->
+        <svg viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#ff2d55" stop-opacity="0.9"/><stop offset="1" stop-color="#ff7b9c" stop-opacity="0.7"/></linearGradient>
+            <filter id="f1" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="10" result="b"/></filter>
+          </defs>
+
+          <rect x="0" y="0" width="800" height="400" rx="10" fill="#060406"/>
+
+          <!-- mock C2 nodes -->
+          <g fill="#111" stroke="#ff7b9c" stroke-width="2">
+            <circle cx="120" cy="90" r="28" fill="#0a0a0a"/>
+            <circle cx="260" cy="200" r="18" fill="#0a0a0a"/>
+            <circle cx="520" cy="120" r="22" fill="#0a0a0a"/>
+            <circle cx="640" cy="260" r="16" fill="#0a0a0a"/>
+          </g>
+
+          <!-- connections -->
+          <path d="M148 90 C190 90 210 160 260 200" stroke="url(#g1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M278 200 C360 220 440 160 520 120" stroke="url(#g1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <path d="M546 120 C600 120 630 200 640 260" stroke="url(#g1)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+          <!-- center console -->
+          <g transform="translate(320,220)">
+            <rect x="-120" y="-70" width="240" height="120" rx="8" fill="#080808" stroke="#ff2d55" stroke-width="1.8"/>
+            <text x="0" y="-12" text-anchor="middle" font-family="monospace" font-size="18" fill="#ffb1c4">C2 MOCK</text>
+            <text x="0" y="12" text-anchor="middle" font-family="monospace" font-size="12" fill="#ffb1c4">LAB ONLY</text>
+          </g>
+
+        </svg>
+        <div class="glow"></div>
+      </aside>
+    </section>
+
+    <section class="grid-3">
+      <div class="panel">
+        <h4>Core Tools</h4>
+        <div class="tools">
+          <div class="tool"><div class="dot"></div><div>Caldera / Atomic Red Team</div></div>
+          <div class="tool"><div class="dot"></div><div>Cobalt Strike (lab)</div></div>
+          <div class="tool"><div class="dot"></div><div>Metasploit (learning)</div></div>
+          <div class="tool"><div class="dot"></div><div>Empire / Pupy (sandbox)</div></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4>Playbooks</h4>
+        <div class="list">
+          <div style="font-weight:700">Phishing Simulation</div>
+          <div style="font-size:13px;color:var(--muted)">Template, landing page, detection checklist</div>
+          <hr style="border:none;border-top:1px solid rgba(255,255,255,0.03);margin:8px 0">
+          <div style="font-weight:700">Lateral Movement Emulation</div>
+          <div style="font-size:13px;color:var(--muted)">OPSEC notes & detection opportunities</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h4>Responsible Use</h4>
+        <p style="color:var(--muted);margin:0">All artifacts here are for authorized testing, research and improving defenses. Do not use these techniques against systems you do not own or have explicit permission to test. Read the legal & disclosure section before any engagement.</p>
+      </div>
+    </section>
+
+    <section id="killchain" class="panel" style="margin-top:18px">
+      <h3>Adversary Kill Chain (sample)</h3>
+      <div class="killchain">
+        <div class="kc">Reconnaissance</div>
+        <div class="kc">Initial Access</div>
+        <div class="kc">Execution</div>
+        <div class="kc">Persistence</div>
+        <div class="kc">Discovery</div>
+        <div class="kc">Lateral Movement</div>
+        <div class="kc">Exfiltration</div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top:18px">
+      <h3>Select Writeups & Labs</h3>
+      <ul style="color:var(--muted)">
+        <li>Phishing -> C2: detection gaps and mitigations.</li>
+        <li>Lateral movement: opsec considerations & blue-team detections.</li>
+        <li>C2 resilience: simulation and telemetry collection.</li>
+      </ul>
+    </section>
+
+    <!-- POSTS / BLOG SECTION -->
+    <section id="posts" class="panel" style="margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Posts & Writeups</h3>
+        <div style="font-size:13px;color:var(--muted)">Share updates, lab notes, and writeups</div>
+      </div>
+
+      <div id="firebaseNotice" class="notice" style="display:none"></div>
+
+      <form id="postForm">
+        <input name="title" placeholder="Post title" required />
+        <textarea name="body" rows="4" placeholder="Short writeup or notes" required></textarea>
+        <button type="submit">Publish Post</button>
+      </form>
+
+      <div class="posts-list" id="postsList">Loading posts…</div>
+    </section>
+
+    <!-- CONTACT SECTION (writes to Firebase) -->
+    <section id="contact" class="panel" style="margin-top:18px">
+      <h3>Contact & Engagements</h3>
+      <p style="color:var(--muted)">I accept authorized engagements, purple-team collaborations, and mentorship. For any disclosure or contract requests, please include scope and proof of authorization.</p>
+
+      <form id="contactForm">
+        <input name="name" placeholder="Your name" required />
+        <input name="email" placeholder="Email" type="email" required />
+        <textarea name="message" rows="4" placeholder="Short message (include scope / authorization)" required></textarea>
+        <button type="submit">Send Message</button>
+      </form>
+
+      <div id="contactStatus" style="margin-top:10px;color:var(--muted)"></div>
+
+      <p style="margin-top:12px">Email: <a href="mailto:cdy738@gmail.com">cdy738@gmail.com</a> • GitHub: <a href="#">github/faizelahi</a></p>
+    </section>
+
+    <footer>© <span id="yr"></span> — Red Team (Ethical Hacking) — For authorized research only</footer>
+  </div>
+
+  <div class="fab" onclick="document.getElementById('contactForm').scrollIntoView({behavior:'smooth'})">Contact</div>
+
+  <!-- Modal markup (backdrop + box) -->
+  <div id="postModalBackdrop">
+    <div id="postModal"></div>
+  </div>
+
+  <!-- Firebase (modular v9) - dynamic import with robust error handling and local fallback -->
+  <script type="module">
+    // Replace the following config object with your Firebase project's config
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+
+    const firebaseNotice = document.getElementById('firebaseNotice');
+    const postsList = document.getElementById('postsList');
+    const postForm = document.getElementById('postForm');
+    const contactForm = document.getElementById('contactForm');
+    const contactStatus = document.getElementById('contactStatus');
+
+    const postModalBackdrop = document.getElementById('postModalBackdrop');
+    const postModal = document.getElementById('postModal');
+
+    const isConfigFilled = firebaseConfig.apiKey && !firebaseConfig.apiKey.includes('YOUR_');
+
+    // Local fallback storage (for testing / when firebase is not configured)
+    function localSavePost(post){
+      const arr = JSON.parse(localStorage.getItem('local_posts')||'[]');
+      arr.unshift(post); localStorage.setItem('local_posts', JSON.stringify(arr));
+      renderPostsFromArray(arr);
+    }
+    function localLoadPosts(){
+      return JSON.parse(localStorage.getItem('local_posts')||'[]');
+    }
+    function localSaveContact(contact){
+      const arr = JSON.parse(localStorage.getItem('local_contacts')||'[]');
+      arr.unshift(contact); localStorage.setItem('local_contacts', JSON.stringify(arr));
+    }
+
+    function renderPostsFromArray(arr){
+      postsList.innerHTML = '';
+      if(!arr.length){ postsList.innerHTML = '<div style="color:var(--muted)">No posts yet.</div>'; return; }
+      arr.forEach(p=>{
+        const el = document.createElement('div'); el.className='post';
+        const time = p.createdAt ? new Date(p.createdAt).toLocaleString() : '';
+        el.innerHTML = `<div style="font-weight:700">${escapeHtml(p.title)}</div><div style="font-size:13px;color:var(--muted);margin-top:6px">${escapeHtml(p.body)}</div><div style="font-size:12px;color:var(--muted);margin-top:8px">${time}</div>`;
+        el.addEventListener('click', ()=> openPostModal(p));
+        postsList.appendChild(el);
+      });
+    }
+
+    // Basic HTML escape
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+    // If firebase config is not filled, use local fallback and show notice
+    if(!isConfigFilled){
+      firebaseNotice.style.display = 'block';
+      firebaseNotice.innerHTML = `<strong>Firebase not configured</strong>: the page is running in <em>local fallback</em> mode. To enable live posts and contacts, paste your Firebase config into the <code>firebaseConfig</code> object in the script and reload.`;
+      renderPostsFromArray(localLoadPosts());
+
+      postForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const title = postForm.title.value.trim();
+        const body = postForm.body.value.trim();
+        if(!title || !body) return alert('Title and body required');
+        localSavePost({title, body, createdAt: Date.now()});
+        postForm.reset();
+      });
+
+      contactForm.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const name = contactForm.name.value.trim();
+        const email = contactForm.email.value.trim();
+        const message = contactForm.message.value.trim();
+        if(!name || !email || !message) return alert('All fields required');
+        localSaveContact({name,email,message,createdAt: Date.now()});
+        contactStatus.textContent = 'Message saved locally (Firebase disabled).';
+        contactForm.reset();
+        setTimeout(()=>contactStatus.textContent='',3000);
+      });
+
+    } else {
+      // Dynamic import of Firebase only when config present
+      (async ()=>{
+        try{
+          const [{ initializeApp }, { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, onSnapshot }] = await Promise.all([
+            import('https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js'),
+            import('https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js')
+          ]);
+
+          const app = initializeApp(firebaseConfig);
+          const db = getFirestore(app);
+
+          // contact handler
+          contactForm.addEventListener('submit', async (e)=>{
+            e.preventDefault();
+            contactStatus.textContent = 'Sending...';
+            const data = {
+              name: contactForm.name.value.trim(),
+              email: contactForm.email.value.trim(),
+              message: contactForm.message.value.trim(),
+              createdAt: serverTimestamp()
+            };
+            try{
+              await addDoc(collection(db,'contacts'), data);
+              contactStatus.textContent = 'Message sent — thank you!';
+              contactForm.reset();
+              setTimeout(()=>contactStatus.textContent='',4000);
+            }catch(err){
+              console.error('Firestore contact error',err);
+              contactStatus.textContent = 'Error sending message (check console).';
+            }
+          });
+
+          // posts publish
+          postForm.addEventListener('submit', async (e)=>{
+            e.preventDefault();
+            const title = postForm.title.value.trim();
+            const body = postForm.body.value.trim();
+            if(!title || !body) return;
+            try{
+              await addDoc(collection(db,'posts'), { title, body, createdAt: serverTimestamp() });
+              postForm.reset();
+            }catch(err){ console.error('Firestore post error',err); alert('Error publishing post. See console.'); }
+          });
+
+          // realtime listener - robust to missing createdAt
+          const postsQuery = query(collection(db,'posts'), orderBy('createdAt','desc'));
+          onSnapshot(postsQuery, (snapshot)=>{
+            postsList.innerHTML = '';
+            if(snapshot.empty){ postsList.innerHTML = '<div style="color:var(--muted)">No posts yet.</div>'; return; }
+            snapshot.forEach(doc=>{
+              const p = doc.data();
+              const el = document.createElement('div'); el.className='post';
+              let time = '';
+              try{
+                if(p.createdAt && typeof p.createdAt.toDate === 'function') time = p.createdAt.toDate().toLocaleString();
+                else if(p.createdAt && typeof p.createdAt.seconds === 'number') time = new Date(p.createdAt.seconds*1000).toLocaleString();
+                else if(p.createdAt) time = new Date(p.createdAt).toLocaleString();
+              }catch(e){ console.warn('Time parse warning', e); }
+
+              el.innerHTML = `<div style="font-weight:700">${escapeHtml(p.title||'Untitled')}</div><div style="font-size:13px;color:var(--muted);margin-top:6px">${escapeHtml(p.body||'')}</div><div style="font-size:12px;color:var(--muted);margin-top:8px">${time}</div>`;
+              el.addEventListener('click', ()=> openPostModal(p));
+              postsList.appendChild(el);
+            });
+          }, (err)=>{
+            console.error('onSnapshot error',err);
+            postsList.innerHTML = '<div style="color:var(--muted)">Error loading posts (see console). Using local data if available.</div>';
+            renderPostsFromArray(localLoadPosts());
+          });
+
+          firebaseNotice.style.display = 'block';
+          firebaseNotice.innerHTML = '<strong>Firebase connected</strong>: posts and contacts are live. Make sure your Firestore rules are secure.';
+
+        }catch(err){
+          console.error('Firebase initialization error', err);
+          firebaseNotice.style.display = 'block';
+          firebaseNotice.innerHTML = '<strong>Firebase error</strong>: see console for details. The page will use local fallback.';
+          // fallback to local behavior
+          renderPostsFromArray(localLoadPosts());
+          postForm.addEventListener('submit', (e)=>{ e.preventDefault(); localSavePost({ title: postForm.title.value.trim(), body: postForm.body.value.trim(), createdAt: Date.now() }); postForm.reset(); });
+          contactForm.addEventListener('submit',(e)=>{ e.preventDefault(); localSaveContact({ name: contactForm.name.value.trim(), email: contactForm.email.value.trim(), message: contactForm.message.value.trim(), createdAt: Date.now() }); contactStatus.textContent='Message saved locally.'; setTimeout(()=>contactStatus.textContent='',3000); contactForm.reset(); });
+        }
+      })();
+    }
+
+    // modal helper functions
+    function openPostModal(post){
+      postModal.innerHTML = `
+        <div style="text-align:right"><button id="closePostModal" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px">✕</button></div>
+        <h2 style="margin-top:0;">${escapeHtml(post.title||'Untitled')}</h2>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px">${post.createdAt ? (typeof post.createdAt === 'number' ? new Date(post.createdAt).toLocaleString() : (post.createdAt.toDate ? post.createdAt.toDate().toLocaleString() : String(post.createdAt))) : ''}</div>
+        <div style="white-space:pre-wrap;line-height:1.45">${escapeHtml(post.body||'')}</div>
+      `;
+      postModalBackdrop.style.display = 'flex';
+      requestAnimationFrame(()=> postModal.classList.add('show'));
+      document.getElementById('closePostModal').addEventListener('click', closePostModal);
+    }
+    function closePostModal(){
+      postModal.classList.remove('show');
+      setTimeout(()=> postModalBackdrop.style.display = 'none', 280);
+    }
+    postModalBackdrop.addEventListener('click', (e)=>{ if(e.target === postModalBackdrop) closePostModal(); });
+
+    // small utilities
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // terminal animation reused
+    const rtline = document.getElementById('rtline');
+    const lines = [
+      'Initializing safe lab environment...',
+      'Loading emulation modules: recon, exec, persistence...',
+      'Generating OPSEC notes and playbook summary...',
+      'Ready. Execute emulation in isolated environment only.'
+    ];
+    let a=0,b=0;
+    function tstep(){
+      rtline.textContent = lines[a].slice(0,b);
+      b++;
+      if(b>lines[a].length){a=(a+1)%lines.length;b=0;setTimeout(tstep,900);}else setTimeout(tstep,40+Math.random()*40);
+    }
+    tstep();
+
+    function downloadPdf(){ alert('Replace this with a PDF download. Upload your resume and I will wire it in.'); }
+
+  </script>
+
+  <!-- Notes for deployment / firebase rules (not executed) -->
+  <script>
+    /*
+      IMPORTANT:
+      - Replace firebaseConfig with your project's values (Firebase console).
+      - Firestore Security Rules: for demo you might allow open reads/writes, but for production use restrictive rules.
+        Example (allow writes to 'posts' only if authenticated or with validation):
+
+      rules_version = '2';
+      service cloud.firestore {
+        match /databases/{database}/documents {
+          match /contacts/{docId} {
+            allow create: if true; // consider adding recaptcha or auth
+            allow read: if false; // restrict reads
+          }
+          match /posts/{docId} {
+            allow read: if true;
+            allow create: if true; // consider requiring auth for publishing or a moderation step
+            allow delete, update: if false;
+          }
+        }
+      }
+
+      - If you need file uploads for attachments, add Firebase Storage and secure it.
+    */
+  </script>
+</body>
+</html>
